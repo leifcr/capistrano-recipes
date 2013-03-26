@@ -1,3 +1,4 @@
+require 'pathname'
 # =========================================================================
 # These are helper methods that will be available to your recipes.
 # =========================================================================
@@ -59,6 +60,8 @@ def generate_config(local_file,remote_file,use_sudo=false)
   buffer    = parse_config(local_file)
   File.open(temp_file, 'w+') { |f| f << buffer }
   upload temp_file, temp_file, :via => :scp
+  # create any folders required
+  run "#{use_sudo ? sudo : ""} mkdir -p #{Pathname.new(remote_file).dirname}"
   run "#{use_sudo ? sudo : ""} mv #{temp_file} #{remote_file}"
   `rm #{temp_file}`
 end

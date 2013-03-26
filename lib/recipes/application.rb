@@ -37,19 +37,19 @@ Capistrano::Configuration.instance.load do
   ssh_options[:forward_agent] = true
   
   # RVM settings
-  set :using_rvm, true unless exists?(:using_rvm)
+  # set :using_rvm, true unless exists?(:using_rvm)
   
   # Bundler settings
   set :bundle_flags, "--deployment --without=development test" unless exists?(:bundle_flags)
 
-  # RVM stuff
-  namespace :rvm do
-    task :trust_rvmrc do
-      run "rvm rvmrc trust #{release_path}"
-    end
-  end
+  # # RVM stuff
+  # namespace :rvm do
+  #   task :trust_rvmrc do
+  #     run "rvm rvmrc trust #{release_path}"
+  #   end
+  # end
 
-  after "deploy", "rvm:trust_rvmrc"
+  # after "deploy", "rvm:trust_rvmrc"
   
   # Daemons settings
   # The unix socket that unicorn will be attached to.
