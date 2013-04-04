@@ -14,34 +14,17 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "dark-capistrano-recipes"
-  gem.homepage = "http://github.com/darkside/capistrano-recipes"
+  gem.name = "leifcr-capistrano-recipes"
+  gem.homepage = "http://github.com/leifcr/capistrano-recipes"
   gem.license = "MIT"
   gem.summary =%q{Capistrano recipes}
   gem.description = %q{Extend the Capistrano gem with these useful recipes}
-  gem.email = "leonardobighetti@gmail.com"
-  gem.authors = ["Phil Misiowiec", "Leonardo Bighetti", "Rogerio Augusto"]
+  gem.email = "leifcr@gmail.com"
+  gem.authors = ["Phil Misiowiec", "Leonardo Bighetti", "Rogerio Augusto", "Leif Ringstad"]
   # dependencies defined in Gemfile
 
 end
 Jeweler::RubygemsDotOrgTasks.new
-
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
-
-task :default => :test
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
