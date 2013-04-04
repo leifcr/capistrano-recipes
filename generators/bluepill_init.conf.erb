@@ -1,8 +1,3 @@
-# ADD DELETE OF PUMA SOCKET IN PRE-START
-# FIX FOR MYSQL
-# FIX TO BE LIKE THE ONE WORKING ON HORSE!
-
-<% ruby_version     = "1.9.3" if ruby_version.nil? %>
 # bluepill - process monitor - 
 # Rails application: <%= "#{application}" %>
 # Environment: <%= "#{rails_env}" %>
@@ -12,7 +7,7 @@
 description     "Simple process monitoring tool for <%= "#{application}" %> - <%= "#{rails_env}" %>"
 
 #start on runlevel [2345]
-start on (local-filesystems and net-device-up IFACE=eth0 and running mongodb)
+start on (local-filesystems and net-device-up IFACE=eth0 and running <%= database %>})
 stop on shutdown
 
 expect daemon
@@ -22,6 +17,7 @@ pre-start script
   echo "Pre-start <%= "#{application}" %>"
   mkdir -p /var/run/bluepill
   chown -R <%= "#{user}:#{group}" %> /var/run/bluepill
+  <%= "rm -f /web/#{rails_env}/#{application}/shared/sockets/puma.sock" if bluepill_use_puma == true %>
 end script
 
 pre-stop script
