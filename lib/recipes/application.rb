@@ -56,7 +56,7 @@ Capistrano::Configuration.instance.load do
   # Also, nginx will upstream to this guy.
   # The *nix place for socks is /var/run, so we should probably put it there
   # Make sure the runner can access this though.
-  set :sockets_path, "/var/run/#{application}_#{rails_env}" unless exists?(:sockets_path)
+  set :sockets_path, File.join(shared_path, "sockets") unless exists?(:sockets_path)
   
   # Just to be safe, put the pid somewhere that survives deploys. shared/pids is
   # a good choice as any.
