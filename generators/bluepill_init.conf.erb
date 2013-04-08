@@ -13,21 +13,33 @@ stop on shutdown
 expect daemon
 # respawn
 
+<% if bluepill_use_puma || bluepill_use_default_base_dir %>
 pre-start script
   echo "Pre-start <%= "#{application}" %>"
+  <% if bluepill_use_default_base_dir %>
   mkdir -p /var/run/bluepill
   chown -R <%= "#{user}:#{group}" %> /var/run/bluepill
-  <%= "rm -f /web/#{rails_env}/#{application}/shared/sockets/puma.sock" if bluepill_use_puma == true %>
+  <% end %>
+  <%= "rm -f #{File.join(shared_path, "sockets", "puma.sock")}" if bluepill_use_puma == true %>
+  <%= "rm -f #{File.join(shared_path, "sockets", "pumactl.sock")}" if bluepill_use_puma == true %>
 end script
-
+<% end %>
 pre-stop script
   echo "Pre-stop <%= "#{application}" %>"
   # When running RVM system-wide this should work:
+  <% if bluepill_use_default_base_dir %>
   exec su - -c "cd <%= "#{current_path}" %>; RAILS_ENV=<%= "#{rails_env}" %> bundle exec bluepill stop <%= "#{application}_#{rails_env}"%> --no-privileged" <%= "#{user}" %>
+  <% else %>
+  exec su - -c "cd <%= "#{current_path}" %>; RAILS_ENV=<%= "#{rails_env}" %> bundle exec bluepill stop <%= "#{application}_#{rails_env}"%> --base-dir <%= "#{bluepill_base_dir}" %> --no-privileged" <%= "#{user}" %>
+  <% end %>
 end script
 
 script
   echo "Starting <%= "#{application}" %>"
   # When running RVM system-wide this should work:
+  <% if bluepill_use_default_base_dir %>
   exec su - -c "cd <%= "#{current_path}" %>; RAILS_ENV=<%= "#{rails_env}" %> bundle exec bluepill load <%= "#{bluepill_remote_config}" %> --no-privileged" <%= "#{user}" %>
+  <% else %>
+  exec su - -c "cd <%= "#{current_path}" %>; RAILS_ENV=<%= "#{rails_env}" %> bundle exec bluepill load <%= "#{bluepill_remote_config}" %> --base-dir <%= "#{bluepill_base_dir}" %> --no-privileged" <%= "#{user}" %>
+  <% end %>
 end script

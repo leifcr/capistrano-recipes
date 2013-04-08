@@ -1,15 +1,22 @@
 <% 
+pumactl_bin         = 'bundle exec pumactl'
 puma_bin            = 'bundle exec puma'
-puma_config         = File.join("#{shared_path}", "config", "puma.rb")
+if bluepill_use_default_base_dir == true and not exists?(:bluepill_base_dir)
+  tmp_bluepill_base_dir = "/var/run/bluepill"
+else
+  tmp_bluepill_base_dir = bluepill_base_dir
+end
 %>
-Bluepill.application("<%= "#{bluepill_app}" %>") do |app|
+Bluepill.application("<%= bluepill_app %>", :base_dir => "<%= tmp_bluepill_base_dir %>") do |app|
   app.environment = { 'RAILS_ENV' => '<%= "#{rails_env}" %>' }
   app.uid = "<%= "#{user}" %>"
   app.gid = "<%= "#{group}" %>"
   <% if bluepill_use_puma == true %>
 # Bluepill Puma setup
   app.process("puma") do |process|
-    process.start_command             = "<%= "#{puma_bin} -C #{puma_config}" %>"
+    process.start_command             = "<%= "#{puma_bin} -C #{bluepill_puma_config}" %>"
+    process.stop_command              = "<%= "#{pumactl_bin} -S #{bluepill_puma_state} stop" %>"
+    process.restart_command           = "<%= "#{pumactl_bin} -S #{bluepill_puma_state} restart" %>"
     process.pid_file                  = "<%= bluepill_puma_pid %>"
     process.daemonize                 = true
     process.checks :cpu_usage, :every => 15.seconds, :below => 95, :times => 5
