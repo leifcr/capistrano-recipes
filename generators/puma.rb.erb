@@ -2,9 +2,10 @@ threads <%= puma_min_threads %>,<%= puma_max_threads %>
 bind "<%= puma_socket %>"
 pidfile "<%= puma_pid %>"
 state_path "<%= puma_state %>"
-<%= "activate_control_app" if puma_activate_control_app %>
+environment "<%= ":#{rails_env}" %>"
+<%= "activate_control_app \"#{puma_control_url}\"" if puma_activate_control_app %>
 
 # TODO - fix restart block!
-<%= "def on_restart"             if puma_on_restart_active %>
-<%= "  puts \"Restarting puma\"" if puma_on_restart_active %>
-<%= "end"                        if puma_on_restart_active %>
+# <%= "on_restart do"             if puma_on_restart_active %>
+# <%= "  puts \"Restarting puma\"" if puma_on_restart_active %>
+# <%= "end"                        if puma_on_restart_active %>
