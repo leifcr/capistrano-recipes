@@ -89,13 +89,16 @@ Capistrano::Configuration.instance.load do
       args += " --base-dir #{bluepill_base_dir}" unless bluepill_use_default_base_dir
       args += " --no-privileged"
       begin
-        run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec bluepill #{bluepill_app} restart #{args}"
+        # run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec bluepill #{bluepill_app} restart #{args}"
+        # MUST quit and start, since the path for current might change.
+        bluepill.quit 
+        bluepill.start 
       rescue
         puts "-----------"
         puts "Bluepill was unable to restart... Trying quit and then start..."
         puts "-----------"
-        bluepill.quit 
-        bluepill.start 
+        # bluepill.quit 
+        # bluepill.start 
       end
 
       # bluepill.quit 
