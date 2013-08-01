@@ -1,3 +1,14 @@
+== Important note:
+
+I will not continue developing these recipes. They are superseeded by:
+https://github.com/leifcr/capistrano-puma
+https://github.com/leifcr/capistrano-delayed_job
+https://github.com/leifcr/capistrano-base_helper
+
+Bluepill was quite good back in the days, then the code went haywire and too unstable for production.
+
+The new recipes are for monit/runit which are almost "too" reliable...
+
 =Capistrano Recipes
 
 Useful Capistrano recipes including:
